@@ -199,25 +199,6 @@ def plot_data(stream_data, heatmap,filterNo,layerName,ev_type):#, data_info, out
 
 
 
-
-
-
-
-
-
-
-
-#using a day with a seismic event and noise
-pickle_dir = "data/time/"
-station = "G623"
-day = 142
-sample_info = DailyStream.unpickle_samples(pickle_dir, station, day, load_frequencies=False)
-
-input_data = sample_info['amplitude_data']
-start_times = sample_info['start_times']
-latitude = sample_info['latitude']
-longitude = sample_info['longitude']
-
 _DATA_STREAM_LENGTH = 2000
 
 
@@ -225,9 +206,13 @@ model = load_model()
 model.load_weights("weights/detection_saved_wt_best-MODEL_time.h5")
 
 #plot of a noise example
-heatmapPropNoise = cam(model,input_data[0][1000],"noise")
+with open("data/noise_sample_time_data.pkl", 'rb') as f:
+    noise_input_data = pickle.load(f)
+heatmapPropNoise = cam(model,noise_input_data,"noise")
 #plot of an event 1 type example
-heatmapPropEvent1 = cam(model,input_data[0][1374],"seis_ev")
+with open("data/seisEv_sample_time_data.pkl", 'rb') as f:
+    seis_ev_input_data = pickle.load(f)
+heatmapPropEvent1 = cam(model,seis_ev_input_data,"seis_ev")
 
 
 #using a sample of acoustic event, type 2 event

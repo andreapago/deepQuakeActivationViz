@@ -169,25 +169,29 @@ model.load_weights("weights/detection_saved_wt_best-MODEL_freq_only.h5")
 
 #code for noise and seismic events
 ##########################################
-
-pickle_dir = "data/freq"
-station = "G623"
-day = 142
-
-sample_info = DailyStream.unpickle_samples(pickle_dir, station, day,
-                                           load_frequencies=True)
-
-#input_data = sample_info['amplitude_data']
-start_times = sample_info['start_times']
-latitude = sample_info['latitude']
-longitude = sample_info['longitude']
-input_data = sample_info['frequency_data']
+#
+# pickle_dir = "data/freq"
+# station = "G623"
+# day = 142
+#
+# sample_info = DailyStream.unpickle_samples(pickle_dir, station, day,
+#                                            load_frequencies=True)
+#
+# #input_data = sample_info['amplitude_data']
+# start_times = sample_info['start_times']
+# latitude = sample_info['latitude']
+# longitude = sample_info['longitude']
+# input_data = sample_info['frequency_data']
 
 
 #noise sample
-heatmapPropFreq = cam(model,input_data[1000],"noise")
+with open("data/noise_sample_freq_data.pkl", 'rb') as f:
+   noise_input_data = pickle.load(f)
+heatmapPropFreq = cam(model,noise_input_data,"noise")
 #seismic event sample
-heatmapPropFreq = cam(model,input_data[1374],"seis_ev")
+with open("data/seisEv_sample_freq_data.pkl", 'rb') as f:
+    seis_ev_input_data = pickle.load(f)
+heatmapPropFreq = cam(model,seis_ev_input_data,"seis_ev")
 ##########################################
 
 
